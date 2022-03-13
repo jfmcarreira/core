@@ -261,9 +261,11 @@ class MediaroomDevice(MediaPlayerEntity):
         """Turn on the receiver."""
 
         try:
-            self.set_state(await self.stb.turn_on())
             if self._optimistic:
+                await self.stb.send_cmd("OK")
                 self._state = STATE_PLAYING
+            else:
+                self.set_state(await self.stb.turn_on())
             self._available = True
         except PyMediaroomError:
             self._available = False
